@@ -3,6 +3,7 @@
     "license": "GPL-3.0",
     "description": "Server side library for React File Manager",
     "type": "library",
+    "keywords": ["file", "manager", "react", "reactjs", "php", "image", "processing"],
     "authors": [
         {
             "name": "Rocky",
