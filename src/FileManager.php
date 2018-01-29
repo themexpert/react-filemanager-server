@@ -11,15 +11,19 @@ class FileManager
 	public function __construct($config_file)
 	{
 	    if(!file_exists($config_file)) {
-	         Response::JSON(['message' => 'Config file could not be found']);
+	         Response::JSON(['message' => 'Config file could not be found'], 503);
 	         die;
         }
 		$config     = include_once $config_file;
 	    if(!is_array($config)) {
-	        Response::JSON(['message' => 'Invalid config file']);
+	        Response::JSON(['message' => 'Invalid config file'], 503);
 	        die;
         }
         self::$JAIL_ROOT = Utils::cleanDir($_SERVER['DOCUMENT_ROOT'] . $config['root']);
+	    if(!file_exists(self::$JAIL_ROOT)) {
+		    Response::JSON(['message' => 'The root directory for file manager does not exist'], 503);
+		    die;
+	    }
         self::$ROOT = Utils::cleanDir(self::$JAIL_ROOT . rtrim(Request::getInstance()->getWorkingDir(), '/') . '/');
 		self::$UPLOAD = $config['upload'];
 
