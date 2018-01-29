@@ -21,10 +21,11 @@ class General
 	public function fetch_list()
 	{
 		$list = glob($this->path . '*');
-		$this->prepareList($list);
 
 		$currentPage = $this->request->get('page');
 		$perPage     = $this->request->get('per_page');
+		if(!$perPage)
+			$perPage = 30;
 		$resultSet   = array_chunk($list, $perPage);
 
 		if (!$currentPage)
@@ -39,6 +40,9 @@ class General
 		{
 			$results = [];
 		}
+
+		$this->prepareList($results);
+
 		$result = ['total' => count($list), 'items' => $results];
 
 		return Response::JSON($result);
@@ -53,6 +57,9 @@ class General
 			$info = pathinfo($item);
 			unset($info['dirname']);
 			$info['is_dir'] = is_dir($item);
+			$info['last_modification_time'] = $this->fileLastMod($item);
+			$info['size'] = Utils::human_filesize(filesize($item));
+			$info['permission'] = $this->filePerms($item);
 			$item           = $info;
 		});
 	}
