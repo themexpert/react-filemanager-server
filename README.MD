@@ -2,6 +2,8 @@
 
 ## Usage
 
+`composer require i-rocky/react-file-manager-server`
+
 Let's say we have the following file structure
 
 * $_SERVER['DOCUMENT_ROOT']
