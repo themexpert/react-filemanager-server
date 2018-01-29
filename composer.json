@@ -1,0 +1,17 @@
+{
+    "name": "i-rocky/react-file-manager-server",
+    "license": "GPL-3.0",
+    "description": "Server side library for React File Manager",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Rocky",
+            "email": "wpkpda@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "FileManager\\": "src/"
+        }
+    }
+}
