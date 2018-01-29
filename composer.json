@@ -1,6 +1,6 @@
 {
   "name": "i-rocky/react-file-manager-server",
-  "license": "GPL-3.0",
+  "license": "MIT",
   "version": "0.0.2",
   "description": "Server side library for React File Manager",
   "type": "library",
