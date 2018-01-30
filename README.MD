@@ -1,8 +1,11 @@
 ## React File Manager Server
 
+## Dependency
+https://github.com/themexpert/react-filemanager-client
+
 ## Usage
 
-`composer require i-rocky/react-file-manager-server`
+`composer require i-rocky/react-filemanager-server`
 
 Let's say we have the following file structure
 
@@ -18,7 +21,7 @@ File: `config.php`
 <?php
 
 return [
-	'root' => '/react-file-manager-server/public/',
+	'root' => '/public/storage/', //your public upload directory
     'upload' => [
         'allowed_types' => ['image/jpeg',  'image/png']
     ]

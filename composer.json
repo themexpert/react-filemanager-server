@@ -1,5 +1,5 @@
 {
-  "name": "i-rocky/react-file-manager-server",
+  "name": "themexpert/react-filemanager-server",
   "license": "MIT",
   "version": "0.0.2",
   "description": "Server side library for React File Manager",
@@ -13,7 +13,7 @@
     "image",
     "processing"
   ],
-  "homepage": "https://github.com/themexpert/react-file-manager-client.git",
+  "homepage": "https://github.com/themexpert/react-filemanager-client.git",
   "authors": [
     {
       "name": "Rocky",
