@@ -5,7 +5,7 @@ https://github.com/themexpert/react-filemanager
 
 ## Usage
 
-`composer require i-rocky/react-filemanager-server`
+`composer require themexpert/react-filemanager-server`
 
 Let's say we have the following file structure
 
