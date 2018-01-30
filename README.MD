@@ -1,7 +1,6 @@
-## React File Manager Server
+This is a Ract based filemanager built for the [Quix Pagebuilder](https://www.themexpert.com/quix-pagebuilder) and open sourced by ThemeXpert.
 
-## Dependency
-https://github.com/themexpert/react-filemanager
+If you want to integrate file manager to you project you need to install the File manger client first. Details instruction will be found here https://github.com/themexpert/react-filemanager
 
 ## Usage
 
