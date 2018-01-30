@@ -1,7 +1,7 @@
 ## React File Manager Server
 
 ## Dependency
-https://github.com/themexpert/react-filemanager-client
+https://github.com/themexpert/react-filemanager
 
 ## Usage
 
