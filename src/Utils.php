@@ -4,21 +4,39 @@ namespace FileManager;
 
 class Utils
 {
-
+	/**
+	 * Clean up directory
+	 *
+	 * @param $dir
+	 *
+	 * @return null|string|string[]
+	 */
 	public static function cleanDir($dir)
 	{
 		return preg_replace('!\/+!', '/', $dir);
 	}
 
+	/**
+	 * Checks for security
+	 *
+	 * @param $dir
+	 */
 	public static function secureDir($dir)
 	{
-		if (strpos($dir, '..') !== false)
+		if (strpos($dir, '/..') !== false || strpos($dir, '../') !== false)
 		{
-			Response::JSON(['message' => 'You can not use `..` in directory'], 403);
+			Response::JSON(['message' => 'You can not use `/..` and `../` in directory'], 403);
 			die();
 		}
 	}
 
+	/**
+	 * Gives a human-readable file-size
+	 * @param     $bytes
+	 * @param int $decimals
+	 *
+	 * @return string
+	 */
 	public static function human_filesize($bytes, $decimals = 2)
 	{
 		$sz     = 'BKMGTP';
