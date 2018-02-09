@@ -4,6 +4,13 @@ namespace FileManager;
 
 class Loader
 {
+	/**
+	 * generates and sends thumb for an image
+	 *
+	 * @param $path
+	 *
+	 * @return bool
+	 */
 	public static function thumb($path)
 	{
 		self::validate($path);
@@ -13,6 +20,13 @@ class Loader
 		return Response::RAW(mime_content_type($thumb), file_get_contents($thumb));
 	}
 
+	/**
+	 * Sends related icon to the file type
+	 *
+	 * @param $type
+	 *
+	 * @return bool
+	 */
 	public static function icon($type)
 	{
 		$path = __DIR__ . '/images/' . $type . '.png';
@@ -24,6 +38,13 @@ class Loader
 		return Response::RAW(mime_content_type($path), file_get_contents($path));
 	}
 
+	/**
+	 * Sends raw file with mime-type
+	 *
+	 * @param $path
+	 *
+	 * @return bool
+	 */
 	public static function raw($path)
 	{
 		self::validate($path);
@@ -31,6 +52,11 @@ class Loader
 		return Response::RAW(mime_content_type($path), file_get_contents($path));
 	}
 
+	/**
+	 * Validates the request
+	 *
+	 * @param $path
+	 */
 	private static function validate(&$path)
 	{
 		$path = Utils::cleanDir(FileManager::$ROOT . $path);
@@ -43,6 +69,13 @@ class Loader
 		}
 	}
 
+	/**
+	 * Generates thumb
+	 *
+	 * @param $path
+	 *
+	 * @return string
+	 */
 	private static function genThumb($path)
 	{
 		if (basename(dirname($path)) == '_thumbs')
