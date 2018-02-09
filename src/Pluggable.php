@@ -11,11 +11,20 @@ class Pluggable
 
 	private $plugins = [];
 
+	/**
+	 * Pluggable constructor.
+	 * Loads all the plugins
+	 */
 	private function __construct()
 	{
 		$this->load(General::class);
 	}
 
+	/**
+	 * Apply singleton
+	 *
+	 * @return Pluggable
+	 */
 	public static function getInstance()
 	{
 		if (self::$instance)
@@ -27,6 +36,11 @@ class Pluggable
 		return self::$instance;
 	}
 
+	/**
+	 * Loads a plugin
+	 *
+	 * @param $class
+	 */
 	private function load($class)
 	{
 		$class                                             = new \ReflectionClass($class);
@@ -38,16 +52,36 @@ class Pluggable
 		];
 	}
 
+	/**
+	 * Checks if an alias is valid
+	 *
+	 * @param $category
+	 * @param $alias
+	 *
+	 * @return bool
+	 */
 	public function isValidAlias($category, $alias)
 	{
 		return array_key_exists($category, $this->plugins) && in_array($alias, $this->plugins[$category]['methods']);
 	}
 
+	/**
+	 * Retrieve category
+	 *
+	 * @param $category
+	 *
+	 * @return mixed
+	 */
 	public function getCategory($category)
 	{
 		return $this->plugins[$category];
 	}
 
+	/**
+	 * Execute a request
+	 *
+	 * @return mixed
+	 */
 	public function executeRequest()
 	{
 		$request = Request::getInstance();
@@ -55,6 +89,9 @@ class Pluggable
 		return call_user_func([new $category['class'], $request->getAlias()]);
 	}
 
+	/**
+	 * Print plugins information
+	 */
 	public function log()
 	{
 		print_r($this->plugins);
