@@ -9,6 +9,9 @@ class General
 	private $payload;
 	private $path;
 
+	/**
+	 * General constructor.
+	 */
 	public function __construct()
 	{
 		$this->request     = Request::getInstance();
@@ -18,15 +21,22 @@ class General
 		Utils::secureDir($this->path);
 	}
 
+	/**
+	 * Send the list of items in current folder
+	 *
+	 * @return mixed
+	 */
 	public function fetch_list()
 	{
 		$list = glob($this->path . '*');
 
 		$currentPage = $this->request->get('page');
 		$perPage     = $this->request->get('per_page');
-		if(!$perPage)
+		if (!$perPage)
+		{
 			$perPage = 30;
-		$resultSet   = array_chunk($list, $perPage);
+		}
+		$resultSet = array_chunk($list, $perPage);
 
 		if (!$currentPage)
 		{
@@ -48,6 +58,11 @@ class General
 		return Response::JSON($result);
 	}
 
+	/**
+	 * Populates the items data
+	 *
+	 * @param $list
+	 */
 	private function prepareList(&$list)
 	{
 		$list = array_values(array_filter($list, function ($item) {
@@ -56,14 +71,19 @@ class General
 		array_walk($list, function (&$item, $key) {
 			$info = pathinfo($item);
 			unset($info['dirname']);
-			$info['is_dir'] = is_dir($item);
+			$info['is_dir']                 = is_dir($item);
 			$info['last_modification_time'] = $this->fileLastMod($item);
-			$info['size'] = Utils::human_filesize(filesize($item));
-			$info['permission'] = $this->filePerms($item);
-			$item           = $info;
+			$info['size']                   = Utils::human_filesize(filesize($item));
+			$info['permission']             = $this->filePerms($item);
+			$item                           = $info;
 		});
 	}
 
+	/**
+	 * Retrieves the file information
+	 *
+	 * @return mixed
+	 */
 	public function file_info()
 	{
 		$file = $this->path . $this->payload['file'];
@@ -72,15 +92,22 @@ class General
 		{
 			return Response::JSON(['message' => 'The request file does not exist'], 404);
 		}
-		$fileInfo = pathinfo($file);
+		$fileInfo                           = pathinfo($file);
 		$fileInfo['last_modification_time'] = $this->fileLastMod($file);
-		$fileInfo['size'] = Utils::human_filesize(filesize($file));
-		$fileInfo['permission'] = $this->filePerms($file);
+		$fileInfo['size']                   = Utils::human_filesize(filesize($file));
+		$fileInfo['permission']             = $this->filePerms($file);
 		unset($fileInfo['dirname']);
 
 		return Response::JSON($fileInfo);
 	}
 
+	/**
+	 * Retrieves the file permission
+	 *
+	 * @param $file
+	 *
+	 * @return string
+	 */
 	private function filePerms($file)
 	{
 		$perms = fileperms($file);
@@ -136,11 +163,23 @@ class General
 		return $info;
 	}
 
+	/**
+	 * Retrieves the last modification time
+	 *
+	 * @param $file
+	 *
+	 * @return false|string
+	 */
 	private function fileLastMod($file)
 	{
-		return date ("F d Y H:i:s.", filemtime($file));
+		return date("F d Y H:i:s.", filemtime($file));
 	}
 
+	/**
+	 * Creates new directory
+	 *
+	 * @return mixed
+	 */
 	public function new_dir()
 	{
 		$path = $this->path;
@@ -166,6 +205,11 @@ class General
 		return Response::JSON(['message' => 'Could not complete the operation'], 503);
 	}
 
+	/**
+	 * Creates new file
+	 *
+	 * @return mixed
+	 */
 	public function new_file()
 	{
 		$path = $this->path . $this->payload['filename'];
@@ -190,6 +234,11 @@ class General
 		return Response::JSON(['message' => 'Failed to add new file'], 503);
 	}
 
+	/**
+	 * Catches uploaded file
+	 *
+	 * @return mixed
+	 */
 	public function upload()
 	{
 		if (!$this->request->hasKey('file'))
@@ -199,9 +248,10 @@ class General
 		$file = $this->request->file('file');
 
 		$mime = mime_content_type($file['tmp_name']);
-		if(!in_array($mime, FileManager::$UPLOAD['allowed_types'])) {
-		    return Response::JSON(['message' => $mime . ' type of files are not allowed to be uploaded'], 403);
-        }
+		if (!in_array($mime, FileManager::$UPLOAD['allowed_types']))
+		{
+			return Response::JSON(['message' => $mime . ' type of files are not allowed to be uploaded'], 403);
+		}
 
 		if (move_uploaded_file($file['tmp_name'], $this->path . $file['name']))
 		{
@@ -211,6 +261,11 @@ class General
 		return Response::JSON(['message' => 'Could not upload file'], 503);
 	}
 
+	/**
+	 * Sends all item from current directory
+	 *
+	 * @return mixed
+	 */
 	public function scan_dir()
 	{
 		$query = $this->payload['query'];
@@ -237,6 +292,11 @@ class General
 		return Response::JSON($all);
 	}
 
+	/**
+	 * Renames an item
+	 *
+	 * @return mixed
+	 */
 	public function rename()
 	{
 		$oldName = $this->payload['old'];
@@ -258,6 +318,11 @@ class General
 		return Response::JSON(['message' => 'Could not rename'], 503);
 	}
 
+	/**
+	 * Copies item or items
+	 *
+	 * @return mixed
+	 */
 	public function copy()
 	{
 		$sources          = $this->payload['sources'];
@@ -305,6 +370,14 @@ class General
 		return Response::JSON(['message' => 'Selected files and folders has been copied', 'bag' => $message_bag]);
 	}
 
+	/**
+	 * Copies recursively
+	 *
+	 * @param $src
+	 * @param $dst
+	 *
+	 * @return bool
+	 */
 	private function recursiveCopy($src, $dst)
 	{
 		$dir = opendir($src);
@@ -328,6 +401,11 @@ class General
 		return file_exists($dst);
 	}
 
+	/**
+	 * Moves item or items
+	 *
+	 * @return mixed
+	 */
 	public function move()
 	{
 		$sources          = $this->payload['sources'];
@@ -375,6 +453,14 @@ class General
 		return Response::JSON(['message' => 'Selected files and folders has been moved', 'bag' => $message_bag]);
 	}
 
+	/**
+	 * Moves items recursively
+	 *
+	 * @param $src
+	 * @param $dst
+	 *
+	 * @return bool
+	 */
 	private function recursiveMove($src, $dst)
 	{
 		$dir = opendir($src);
@@ -400,6 +486,11 @@ class General
 		return file_exists($dst);
 	}
 
+	/**
+	 * Deletes an item
+	 *
+	 * @return mixed
+	 */
 	public function delete()
 	{
 		$items = $this->payload['items'];
@@ -436,6 +527,11 @@ class General
 		return Response::JSON(['message' => 'Selected Files are Deleted']);
 	}
 
+	/**
+	 * Removes thumb when an image is deleted
+	 *
+	 * @param $path
+	 */
 	private function remThumb($path)
 	{
 		$info = pathinfo($path);
@@ -451,6 +547,13 @@ class General
 		}
 	}
 
+	/**
+	 * Delete directory recursively
+	 *
+	 * @param $dir
+	 *
+	 * @return bool
+	 */
 	private function rrmdir($dir)
 	{
 		if (!is_dir($dir))
