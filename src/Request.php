@@ -11,6 +11,9 @@ class Request {
 	private $requests = [];
 	private $files = [];
 
+	/**
+	 * Request constructor.
+	 */
 	private function __construct()
 	{
 		$requests = !empty($_FILES) ? $_POST : json_decode(trim(file_get_contents('php://input')), true);
@@ -19,6 +22,11 @@ class Request {
 		$this->files = $_FILES;
 	}
 
+	/**
+	 * Applies singleton
+	 *
+	 * @return Request
+	 */
 	public static function getInstance() {
 		if(self::$instance)
 			return self::$instance;
@@ -79,6 +87,11 @@ class Request {
 		return $this->files[$file];
 	}
 
+	/**
+	 * Get the currently working dir
+	 *
+	 * @return mixed|null
+	 */
 	public function getWorkingDir()
 	{
 		if(!$this->hasKey('working_dir'))
@@ -86,6 +99,11 @@ class Request {
 		return $this->get('working_dir');
 	}
 
+	/**
+	 * Get the current category
+	 *
+	 * @return mixed|null
+	 */
 	public function getCategory()
 	{
 		if(!$this->hasKey('category'))
@@ -93,6 +111,11 @@ class Request {
 		return $this->get('category');
 	}
 
+	/**
+	 * Get the current alias
+	 *
+	 * @return mixed|null
+	 */
 	public function getAlias()
 	{
 		if(!$this->hasKey('alias'))
@@ -100,6 +123,11 @@ class Request {
 		return $this->get('alias');
 	}
 
+	/**
+	 * Get the current payload
+	 *
+	 * @return mixed|null
+	 */
 	public function getPayload()
 	{
 		if(!$this->hasKey('payload'))
@@ -107,6 +135,14 @@ class Request {
 		return $this->get('payload');
 	}
 
+	/**
+	 * Handle static calls
+	 *
+	 * @param $name
+	 * @param $arguments
+	 *
+	 * @return mixed
+	 */
 	public static function __callStatic($name, $arguments)
 	{
 		if(!self::$instance)
