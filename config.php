@@ -1,7 +1,7 @@
 <?php
 
 return [
-	'root' => '/react-file-manager-server/public/',
+	'root' => '/react-filemanager-server/public/',
     'upload' => [
         'allowed_types' => ['image/jpeg',  'image/png']
     ]

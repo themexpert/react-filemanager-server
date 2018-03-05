@@ -7,6 +7,7 @@ class FileManager
 	public static $ROOT;
 	public static $JAIL_ROOT;
 	public static $UPLOAD;
+	public static $CONFIG;
 
 	public function __construct($config_file)
 	{
@@ -19,6 +20,7 @@ class FileManager
 	        Response::JSON(['message' => 'Invalid config file'], 503);
 	        die;
         }
+        self::$CONFIG = $config;
         self::$JAIL_ROOT = Utils::cleanDir($_SERVER['DOCUMENT_ROOT'] . $config['root']);
 	    if(!file_exists(self::$JAIL_ROOT)) {
 		    Response::JSON(['message' => 'The root directory for file manager does not exist'], 503);
@@ -35,7 +37,10 @@ class FileManager
 		$pluggable = Pluggable::getInstance();
 		$request   = Request::getInstance();
 
-		if($request->hasKey('thumb')) {
+		if($request->hasKey('plugins')) {
+			return $pluggable->plugins();
+		}
+		elseif($request->hasKey('thumb')) {
 			return Loader::thumb($request->get('thumb'));
 		}
 		elseif($request->hasKey('icon')) {
@@ -45,9 +50,9 @@ class FileManager
 			return Loader::raw($request->get('raw'));
 		}
 
-		$category  = $request->getCategory();
+		$plugin  = $request->getPlugin();
 		$alias     = $request->getAlias();
-		if (!$category || !$alias || !$pluggable->isValidAlias($category, $alias))
+		if (!$plugin || !$alias || !$pluggable->isValidAlias($plugin, $alias))
 		{
 			return Response::JSON(['message' => 'Invalid Request'], 406);
 		}
