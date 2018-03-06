@@ -21,7 +21,7 @@ class FileManager
 	        die;
         }
         self::$CONFIG = $config;
-        self::$JAIL_ROOT = Utils::cleanDir($_SERVER['DOCUMENT_ROOT'] . $config['root']);
+        self::$JAIL_ROOT = Utils::cleanDir($config['root']);
 	    if(!file_exists(self::$JAIL_ROOT)) {
 		    Response::JSON(['message' => 'The root directory for file manager does not exist'], 503);
 		    die;
