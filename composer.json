@@ -24,8 +24,5 @@
     "psr-4": {
       "FileManager\\": "src/"
     }
-  },
-  "require": {
-    "themexpert/react-filemanager-server" : "dev-master"
   }
 }
