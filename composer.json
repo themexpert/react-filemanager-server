@@ -26,6 +26,6 @@
     }
   },
   "require": {
-    "themexpert/react-filemanager-server"
+    "themexpert/react-filemanager-server" : "dev-master"
   }
 }
