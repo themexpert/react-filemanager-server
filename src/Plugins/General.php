@@ -315,7 +315,9 @@ class General extends Plugin
 
 				return $parts;
 			})()) . '/';
-		$all = array_chunk($all, 10)[0];
+		$all = array_chunk($all, 10);
+        if(count($all))
+            $all = $all[0];
 		$all = array_map(function ($item) use ($up) {
 			$item['full_path'] = $up . $item['basename'];
 
