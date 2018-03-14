@@ -309,12 +309,12 @@ class General extends Plugin
 
 		$all = glob($dir);
 		$this->prepareList($all);
-		$up  = implode('/', (function () use ($query) {
-				$parts = explode('/', $query);
-				unset($parts[count($parts) - 1]);
 
-				return $parts;
-			})()) . '/';
+		//get the directory of search
+        $parts = explode("/", $query);
+        unset($parts[count($parts)-1]);
+		$up  = implode('/', $parts) . '/';
+
 		$all = array_chunk($all, 10);
         if(count($all))
             $all = $all[0];
