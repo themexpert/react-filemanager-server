@@ -7,7 +7,7 @@ use FileManager\Request;
 use FileManager\Response;
 use FileManager\Utils;
 
-class General extends Plugin
+class General
 {
 	private $request;
 	private $working_dir;
@@ -616,23 +616,5 @@ class General extends Plugin
 		closedir($handle);
 
 		return rmdir($dir);
-	}
-
-	public static function methods()
-	{
-		return [
-			"fetch_list",
-			"file_info",
-			"new_dir",
-			"new_file",
-			"upload",
-            "download",
-            "remote_download",
-			"scan_dir",
-			"rename",
-			"copy",
-			"move",
-			"delete"
-		];
 	}
 }

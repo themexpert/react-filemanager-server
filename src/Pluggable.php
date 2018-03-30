@@ -60,23 +60,27 @@ class Pluggable
 		}
 	}
 
-	/**
-	 * Loads a plugin
-	 *
-	 * @param $class
-	 */
+    /**
+     * Loads a plugin
+     *
+     * @param $class_path
+     */
 	private function load($class_path)
 	{
-		$reflection_class                 = new \ReflectionClass($class_path);
-		$class_short_name                 = $reflection_class->getShortName();
+        try {
+            $reflection_class = new \ReflectionClass($class_path);
+        } catch (\ReflectionException $e) {
+            error_log($e->getMessage());
+        }
+        $class_short_name                 = $reflection_class->getShortName();
 		if($class_short_name === 'Plugin')
 			return;
 		$class_name                       = $reflection_class->getName();
 		$this->plugins[$class_short_name] = [
 			'class'   => $class_name,
-			'methods' => $class_name::methods(),
-			'actions'  => $class_name::actions(),
-            'tabs' => $class_name::tabs()
+			'methods' => array_map(function(\ReflectionMethod $method) {
+			    return $method->getName();
+            }, $reflection_class->getMethods(\ReflectionMethod::IS_PUBLIC))
 		];
 	}
 
@@ -123,10 +127,10 @@ class Pluggable
 		return call_user_func([new $plugin['class'], $request->getAlias()]);
 	}
 
-	public function plugins()
-	{
-		return Response::JSON($this->plugins);
-	}
+//	public function plugins()
+//	{
+//		return Response::JSON($this->plugins);
+//	}
 
 	/**
 	 * Print plugins information
