@@ -20,7 +20,7 @@ File: `config.php`
 <?php
 
 return [
-	'root' => '/public/storage/', //your public upload directory
+	'root' => $_['DOCUMENT_ROOT'] . '/public/uploads/', //your public upload directory
     'upload' => [
         'allowed_types' => ['image/jpeg',  'image/png']
     ]
