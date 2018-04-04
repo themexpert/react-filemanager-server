@@ -2,7 +2,7 @@
   "name": "themexpert/react-filemanager-server",
   "license": "MIT",
   "version": "1.0.1",
-  "description": "Server side library for React File Manager",
+  "description": "File Manager Server side script",
   "type": "library",
   "keywords": [
     "file",
