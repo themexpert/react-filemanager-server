@@ -1,10 +1,10 @@
 <?php
 
-namespace FileManager\Plugins\FontAwesome;
+namespace FileManager\Plugins\TxIcons;
 
 use FileManager\Response;
 
-class FontAwesome
+class TxIcons
 {
     public function icons()
     {
