@@ -2,8 +2,17 @@
 
 namespace FileManager;
 
+use FileManager\Plugins\General;
+
 class Pluggable
 {
+
+    /*
+     * default plugins
+     */
+    private $DEFAULT_PLUGINS = [
+        General::class
+    ];
 	/**
 	 * @var Pluggable
 	 */
@@ -18,7 +27,6 @@ class Pluggable
 	private function __construct()
 	{
 		$this->loadPlugins();
-//		$this->log();
 	}
 
 	/**
@@ -37,26 +45,22 @@ class Pluggable
 		return self::$instance;
 	}
 
+    /**
+     * Get the array of plugins to load
+     *
+     * @return array
+     */
+	private function getPlugins() {
+	    return array_merge($this->DEFAULT_PLUGINS, FileManager::$CONFIG['plugins']);
+    }
+
+    /**
+     * Load the plugins
+     */
 	private function loadPlugins()
 	{
-		$plugins = glob(__DIR__ . '/Plugins/*');
-		foreach ($plugins as $plugin)
-		{
-			if (is_dir($plugin))
-			{
-				$file = $plugin . '/' . basename($plugin) . '.php';
-				if (!file_exists($file))
-				{
-					include_once $file;
-				}
-				$plugin = basename($plugin);
-				$this->load('FileManager\\Plugins\\' . $plugin . '\\' . $plugin);
-			}
-			else
-			{
-				include_once $plugin;
-				$this->load('FileManager\\Plugins\\' . basename($plugin, '.' . pathinfo($plugin)['extension']));
-			}
+        foreach (FileManager::$CONFIG['plugins'] as $plugin) {
+            $this->load($plugin);
 		}
 	}
 
@@ -125,18 +129,5 @@ class Pluggable
 		$plugin = $this->getPlugin($request->getPlugin());
 
 		return call_user_func([new $plugin['class'], $request->getAlias()]);
-	}
-
-//	public function plugins()
-//	{
-//		return Response::JSON($this->plugins);
-//	}
-
-	/**
-	 * Print plugins information
-	 */
-	public function log()
-	{
-		print_r($this->plugins);
 	}
 }
