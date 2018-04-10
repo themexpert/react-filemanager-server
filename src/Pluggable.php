@@ -59,7 +59,8 @@ class Pluggable
      */
 	private function loadPlugins()
 	{
-        foreach (FileManager::$CONFIG['plugins'] as $plugin) {
+	    $plugins = $this->getPlugins();
+        foreach ($plugins as $plugin) {
             $this->load($plugin);
 		}
 	}
