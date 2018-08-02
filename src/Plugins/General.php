@@ -289,7 +289,10 @@ class General
         if(copy($image, $filepath)) {
             $ext = Utils::get_file_ext(mime_content_type($filepath));
             rename($filepath, $filepath . '.' . $ext);
-            return Response::JSON(['message' => 'File has been downloaded']);
+            return Response::JSON([
+                'message' => 'File has been downloaded',
+                'path' => Request::getInstance()->getWorkingDir() . "{$filename}.{$ext}",
+            ]);
         }
         return Response::JSON(['message' => 'Could not download file'], 503);
 	}
