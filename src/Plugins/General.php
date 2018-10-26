@@ -64,7 +64,7 @@ class General
 
         $results = array_merge($dirs, $results);
         $this->prepareList($results);
-        $result = ['total' => count($results), 'items' => $results];
+        $result = ['total' => count($list), 'items' => $results];
         return Response::JSON($result);
 	}
 
