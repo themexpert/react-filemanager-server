@@ -33,7 +33,11 @@ class General
 	 */
 	public function fetch_list()
 	{
-		$list = glob($this->path . '*');
+		$search = '*';
+		if ($this->request->get('query')) {
+			$search .= $this->request->get('query') . '*';
+		}
+		$list = glob($this->path . $search);
 
 		$currentPage = $this->request->get('page');
 		$perPage     = $this->request->get('per_page');
