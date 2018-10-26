@@ -17,7 +17,7 @@ class Loader
 
 		$thumb = self::genThumb($path);
 
-		return Response::RAW(mime_content_type($thumb), file_get_contents($thumb));
+		return Response::RAW(Utils::get_mime_type($thumb), file_get_contents($thumb));
 	}
 
 	/**
@@ -35,7 +35,7 @@ class Loader
 			$path = __DIR__ . '/images/file.png';
 		}
 
-		return Response::RAW(mime_content_type($path), file_get_contents($path));
+		return Response::RAW(Utils::get_mime_type($path), file_get_contents($path));
 	}
 
 	/**
@@ -49,7 +49,7 @@ class Loader
 	{
 		self::validate($path);
 
-		return Response::RAW(mime_content_type($path), file_get_contents($path));
+		return Response::RAW(Utils::get_mime_type($path), file_get_contents($path));
 	}
 
 	/**

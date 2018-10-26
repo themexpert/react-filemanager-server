@@ -41,26 +41,27 @@ class General
 		{
 			$perPage = 30;
 		}
-		$resultSet = array_chunk($list, $perPage);
+		$dirs = array_filter($list, 'is_dir');
+        $files = array_diff($list, $dirs);
+        $resultSet = array_chunk($files, $perPage);
 
-		if (!$currentPage)
-		{
-			$currentPage = 1;
-		}
-		if (count($resultSet) >= $currentPage)
-		{
-			$results = $resultSet[intval($currentPage) - 1];
-		}
-		else
-		{
-			$results = [];
-		}
+        if (!$currentPage)
+        {
+            $currentPage = 1;
+        }
+        if (count($resultSet) >= $currentPage)
+        {
+            $results = $resultSet[intval($currentPage) - 1];
+        }
+        else
+        {
+            $results = [];
+        }
 
-		$this->prepareList($results);
-
-		$result = ['total' => count($list), 'items' => $results];
-
-		return Response::JSON($result);
+        $results = array_merge($dirs, $results);
+        $this->prepareList($results);
+        $result = ['total' => count($results), 'items' => $results];
+        return Response::JSON($result);
 	}
 
 	/**
@@ -260,7 +261,9 @@ class General
 
 		if (move_uploaded_file($file['tmp_name'], $this->path . $file['name']))
 		{
-			return Response::JSON(['message' => 'File uploaded']);
+			$file_array = [$this->path . $file['name']];
+            $this->prepareList($file_array);
+            return Response::JSON(['message' => 'File uploaded', 'file' => $file_array[0]]);
 		}
 
 		return Response::JSON(['message' => 'Could not upload file'], 503);
