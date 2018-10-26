@@ -62,7 +62,9 @@ class General
             $results = [];
         }
 
-        $results = array_merge($dirs, $results);
+        if ($currentPage == 1) {
+			$results = array_merge($dirs, $results);
+		}
         $this->prepareList($results);
         $result = ['total' => count($list), 'items' => $results];
         return Response::JSON($result);
