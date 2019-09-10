@@ -1,8 +1,8 @@
 <?php
 
 return [
-	'root' => $_SERVER['DOCUMENT_ROOT'].'/react-filemanager-server/public/',
+	'root' => realpath(__DIR__ . '/../react-filemanager-server/public/'),
     'upload' => [
-        'allowed_types' => ['image/jpeg',  'image/png']
+        'allowed_types' => ['image/jpeg',  'image/png', 'image/svg']
     ]
 ];
