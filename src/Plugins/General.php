@@ -356,6 +356,7 @@ class General extends Plugin
             return Response::JSON(['message' => 'The file name can not contain directory separator'], 403);
         }
         if (rename($this->path.$oldName, $this->path.$newName)) {
+            $this->remThumb($this->path.$oldName);
             return Response::JSON(['message' => 'Rename successful']);
         }
 
@@ -469,6 +470,9 @@ class General extends Plugin
 
             if (( ! is_dir($sourcePath) && rename($sourcePath, $safe_target)) || $this->recursiveMove($sourcePath,
                     $safe_target)) {
+                if(is_file($sourcePath)) {
+                    $this->remThumb($sourcePath);
+                }
                 $message_bag[] = "Moved {$source}";
             } else {
                 $message_bag[] = "Could not move {$source}";
@@ -496,6 +500,7 @@ class General extends Plugin
                     $this->recursiveMove($src.'/'.$file, $dst.'/'.$file);
                 } else {
                     rename($src.'/'.$file, $dst.'/'.$file);
+                    $this->remThumb($src.'/'.$file);
                 }
             }
         }
