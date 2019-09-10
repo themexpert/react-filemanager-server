@@ -255,17 +255,21 @@ class General extends Plugin
      *
      * @param $path
      * @param $name
-     * @param  null  $_
+     * @param  null  $i
      *
      * @return string
      */
-    private function getSafeFilename($path, $name, $_ = null)
+    private function getSafeFilename($path, $name, $i = null)
     {
-        $pathname = $path.($_ ? $_.'-' : null).$name;
-        if (file_exists($pathname)) {
-            $_ = $_ ? $_++ : 1;
+        $ext   = pathinfo($name, PATHINFO_EXTENSION);
+        $_name = pathinfo($name, PATHINFO_FILENAME);
 
-            return $this->getSafeFilename($path, $name, $_);
+        $pathname = $path.$_name.($i ? '-'.$i : null).'.'.$ext;
+
+        if (file_exists($pathname)) {
+            $i = $i ? $i + 1 : 1;
+
+            return $this->getSafeFilename($path, $name, $i);
         }
 
         return $pathname;
