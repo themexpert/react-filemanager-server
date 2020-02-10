@@ -43,6 +43,11 @@ class Response {
 	*/
 	public static function RAW($mime, $content, $response=200)
 	{
+		if(!$mime){
+			if(substr($content, 0, 4) === "<svg"){
+				$mime = 'image/svg+xml';
+			}
+		}
 		header('Content-Type: ' . $mime);
 		http_response_code($response);
 		print $content;
