@@ -238,7 +238,7 @@ class General extends Plugin
         }
         $file = $this->request->file('file');
 
-        $mime = mime_content_type($file['tmp_name']);
+        $mime = \mime_content_type($file['tmp_name']);
         if ( ! in_array($mime, FileManager::$UPLOAD['allowed_types'])) {
             return Response::JSON(['message' => $mime.' type of files are not allowed to be uploaded'], 403);
         }
@@ -296,7 +296,7 @@ class General extends Plugin
         $filename = crc32($image);
         $filepath = FileManager::$ROOT.$filename;
         if (copy($image, $filepath)) {
-            $ext = Utils::get_file_ext(mime_content_type($filepath));
+            $ext = Utils::get_file_ext(\mime_content_type($filepath));
             rename($filepath, $filepath.'.'.$ext);
 
             return Response::JSON(['message' => 'File has been downloaded']);
