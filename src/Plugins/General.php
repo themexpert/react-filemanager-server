@@ -65,9 +65,16 @@ class General extends Plugin
      */
     private function prepareList(&$list)
     {
+        /**
+         * @issue Make PHP pathinfo() return the correct filename if the filename is UTF-8
+         * @url https://stackoverflow.com/questions/4451664/make-php-pathinfo-return-the-correct-filename-if-the-filename-is-utf-8
+         */
+        setlocale(LC_ALL, 'en_US.UTF-8');
+        
         $list = array_values(array_filter($list, function ($item) {
             return ! in_array(basename($item), ['.', '..']);
         }));
+        
         array_walk($list, function (&$item, $key) {
             $info = pathinfo($item);
             unset($info['dirname']);
